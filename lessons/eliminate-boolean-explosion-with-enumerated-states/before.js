@@ -1,23 +1,32 @@
-function lightBulb() {
-  let isLit = false
-  let isBroken = false
+const { Machine, interpret } = require('xstate')
 
-  return {
-    state() {
-      return { isLit, isBroken }
+const lightBulbMachine = Machine(
+  {
+    id: 'lightBulb',
+    initial: 'unlit',
+    states: {
+      lit: {
+        on: {
+          BREAK: 'broken',
+          TOGGLE: 'unlit',
+        },
+      },
+      unlit: {
+        on: {
+          BREAK: 'broken',
+          TOGGLE: 'lit',
+        },
+      },
+      broken: {
+        entry: ['logBroken'],
+      },
     },
-    toggle() {
-      isLit = !isLit
+  },
+  {
+    actions: {
+      logBroken: (context, event) => {
+        console.log(`yp, mrs I am broke ${event.location}`)
+      },
     },
-    break() {
-      isBroken = true
-    }
   }
-}
-
-const bulb = lightBulb()
-
-bulb.toggle()
-console.log(bulb.state())
-bulb.break()
-console.log(bulb.state())
+)
