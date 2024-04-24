@@ -1,8 +1,9 @@
 const { Machine, interpret } = require('xstate')
 
+
 const lightBulbMachine = Machine(
   {
-    id: 'lightBulb',
+    id: 'lightBulb', 
     initial: 'unlit',
     states: {
       lit: {
@@ -18,15 +19,22 @@ const lightBulbMachine = Machine(
         },
       },
       broken: {
-        entry: ['logBroken'],
+        entry: ["logLocation", "buyANewBulB"],
       },
     },
   },
   {
     actions: {
-      logBroken: (context, event) => {
-        console.log(`yp, mrs I am broke ${event.location}`)
+      logLocation: (context, event) => {
+        console.log(event.location)
       },
+      buyANewBulB: () => {
+        console.log('buy a new bulb') 
+      }
     },
   }
 )
+
+const service = interpret(lightBulbMachine).start()
+
+service.send({type: 'BREAK', location: 'office'})
