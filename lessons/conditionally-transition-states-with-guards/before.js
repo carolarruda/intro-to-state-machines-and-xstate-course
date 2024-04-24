@@ -10,7 +10,10 @@ const vendingMachineMachine = Machine(
     states: {
       idle: {
         on: {
-          SELECT_ITEM: 'vending',
+          SELECT_ITEM: {
+            target: 'vending',
+            cond: 'depositedEnough'
+          },
           DEPOSIT_QUARTER: {
             actions: ['addQuarter'],
           },
@@ -25,5 +28,8 @@ const vendingMachineMachine = Machine(
         deposited: context => context.deposited + 25,
       }),
     },
+    guards: {
+      depositedEnough: context =>  context.deposited >= 100
+    }
   }
 )

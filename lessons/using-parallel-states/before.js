@@ -1,23 +1,40 @@
-const { Machine } = require('xstate')
+const { Machine } = require("xstate");
 
 const spaceHeaterMachine = Machine({
-  id: 'spaceHeater',
-  initial: 'poweredOff',
+  id: "spaceHeater",
+  initial: "poweredOff",
   states: {
     poweredOff: {
-      on: { TOGGLE_POWER: 'poweredOn' },
+      on: { TOGGLE_POWER: "poweredOn" },
     },
     poweredOn: {
-      on: { TOGGLE_POWER: 'poweredOff' },
-      initial: 'lowHeat',
+      on: { TOGGLE_POWER: "poweredOff" },
+      type: "parallel",
       states: {
-        lowHeat: {
-          on: { TOGGLE_HEAT: 'lowHeat' },
+        heated: {
+          initial: "lowHeat",
+          states: {
+            lowHeat: {
+              on: { TOGGLE_HEAT: "highHeat" },
+            },
+            highHeat: {
+              on: { TOGGLE_HEAT: "lowHeat" },
+            },
+          },
         },
-        highHeat: {
-          on: { TOGGLE_HEAT: 'highHeat' },
+        oscillation: {
+          initial: "disabled",
+          states: {
+            enabled: {
+              on: { TOGGLE_OSC: "disabled" },
+            },
+            disabled: {
+              on: { TOGGLE_OSC: "enabled" },
+            },
+          },
         },
       },
     },
   },
-})
+});
+import { createMachine } from "xstate";

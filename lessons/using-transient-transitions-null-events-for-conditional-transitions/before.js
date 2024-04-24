@@ -14,7 +14,7 @@ const tryTryAgainMachine = Machine(
       trying: {
         entry: ['incTries'],
         on: {
-          '': [{ target: 'success', cond: 'enoughTries' }, { target: 'idle' }],
+          '': [{ target: 'success', cond: 'triedEnough' }, { target: 'idle' }],
         },
       },
       success: {},
@@ -23,11 +23,11 @@ const tryTryAgainMachine = Machine(
   {
     actions: {
       incTries: assign({
-        tries: context => context.tries + 1,
+        tries: (context) => context.tries + 1,
       }),
     },
     guards: {
-      enoughTries: context => context.tries >= 3,
+      enoughTries: (context) => context.tries >= 2,
     },
   }
 )

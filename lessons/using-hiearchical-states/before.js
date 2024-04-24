@@ -5,8 +5,12 @@ const doorMachine = Machine({
   initial: 'locked',
   states: {
     locked: {},
-    unlocked: {},
-    closed: {},
-    opened: {},
+    unlocked: {
+      initial: 'closed',
+      states: {
+        closed: {},
+        opened: {},
+      },
+    },
   },
 })

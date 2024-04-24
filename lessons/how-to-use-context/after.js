@@ -28,13 +28,7 @@ const multiColoredBulbMachine = Machine(
   },
   {
     actions: {
-      changeColor: assign({
-        color: (context, event) => event.color,
-      }),
+      changeColor: assign((context, event) => ({ color: event.color })),
     },
   }
 )
-
-const service = interpret(multiColoredBulbMachine).start()
-
-service.send({ type: 'CHANGE_COLOR', color: '#F00' }) // updates color in context to red
